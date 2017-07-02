@@ -3,10 +3,7 @@
 	"main": "./lib/php-getters-setters-improved",
 	"version": "0.6.0",
 	"description": "generate getters and setters for your php class",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/brunoczim/atom-php-getters-setters-improved"
-	},
+	"repository": "https://github.com/brunoczim/atom-php-getters-setters-improved",
 	"license": "MIT",
 		"engines": {
 		"atom": ">0.100.0"
