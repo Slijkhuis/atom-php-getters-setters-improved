@@ -1,0 +1,10 @@
+	/**
+	 * Set the value of %description%
+	 * @param %type% $%variable%
+	 * @return self
+	 */
+	%scope% function %methodName%(%typeHint%$%variable%) {
+		$this->%variable% = $%variable%;
+		return $this;
+	}
+

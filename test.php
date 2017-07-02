@@ -10,49 +10,45 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Job extends AbstractEntity
-{
-    /**
-     * @protected
-     * @ORM\Column( type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+class Job extends AbstractEntity {
 
-    /**
-     * the job id
-     * @read-only
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $code;
+	/**
+	 * @protected
+	 * @ORM\Column( type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * snake cased var
-     *
-     * @var string
-     */
-    private $snaked_case_var;
+	/**
+	 * the job id
+	 * @read-only
+	 * @var string
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $code;
 
-    /**
-     * private underscore variable
-     *
-     * @var string
-     */
-    private $_underscored;
+	/**
+	 * snake cased var
+	 * @var string
+	 */
+	private $snaked_case_var;
 
-    /**
-     * @var string
-     */
-    private $smartVariableName;
+	/**
+	 * private underscore variable
+	 * @var string
+	 */
+	private $_underscored;
 
+	/**
+	 * @var string
+	 */
+	private $smartVariableName;
 
-    public function __construct()
-    {
-        $this->started = new \DateTime;
-        $this->conversionDone = false;
-    }
+	public function __construct() {
+		$this->started = new \DateTime;
+		$this->conversionDone = false;
+	}
+
 
 }

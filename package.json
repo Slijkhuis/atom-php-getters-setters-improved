@@ -1,17 +1,17 @@
 {
-  "name": "php-getters-setters",
-  "main": "./lib/php-getters-setters",
-  "version": "0.5.5",
-  "description": "generate getters and setters for your php class",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/francodacosta/atom-php-getters-setters"
-  },
-  "license": "MIT",
-  "engines": {
-    "atom": ">0.100.0"
-  },
-  "dependencies": {
-    "atom-space-pen-views": "^2.0.3"
-  }
+	"name": "php-getters-setters-improved",
+	"main": "./lib/php-getters-setters-improved",
+	"version": "0.6.0",
+	"description": "generate getters and setters for your php class",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/brunoczim/atom-php-getters-setters-improved"
+	},
+	"license": "MIT",
+		"engines": {
+		"atom": ">0.100.0"
+	},
+		"dependencies": {
+		"atom-space-pen-views": "^2.0.3"
+	}
 }

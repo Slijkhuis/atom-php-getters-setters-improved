@@ -1,100 +1,88 @@
+fs = require 'fs'
 
 module.exports =
 class TemplateManager
 
-    constructor: (@functions)->
-        @psrMethodNames   = atom.config.get 'php-getters-setters.camelCasedMethodNames'
-        @ignoredTypeHints = atom.config.get 'php-getters-setters.doNotTypeHint'
-        @getterTemplate   = atom.config.get 'php-getters-setters.getterTemplate'
-        @setterTemplate   = atom.config.get 'php-getters-setters.setterTemplate'
+  constructor: (@functions)->
+    @psrMethodNames   = atom.config.get 'php-getters-setters.camelCasedMethodNames'
+    @ignoredTypeHints = atom.config.get 'php-getters-setters.doNotTypeHint'
+    @getterTemplate   = fs.readFileSync(__dirname + '/../templates/getter').toString()
+    @setterTemplate   = fs.readFileSync(__dirname + '/../templates/setter').toString()
 
-    getCamelCasedVariableName: (variable) ->
-        parts = variable.split('_')
+  getCamelCasedVariableName: (variable) ->
+    parts = variable.split '_'
+    if null == parts
+      parts = [variable]
+    name = ''
+    for part in parts
+      name += part.charAt(0).toUpperCase() + part.slice 1
+    return name
 
-        if null == parts
-            parts = [variable]
+  getSnakeCasedVariableName: (variable) ->
+    parts = variable.split('_')
+    if null == parts
+      parts = [variable]
+    name = ''
+    for part in parts
+      # parts = variable.match(/_(.*)|([A-Z][a-z]+)/g)
+      name += '_' + part
+    return name
 
-        name = ''
-        for part in parts
-            name += part.charAt(0).toUpperCase() + part.slice 1
+  determineTypeHint: (type) ->
+    if type in @ignoredTypeHints
+      return ""
+    return type
 
-        return name
+  getHumanReadableVariableName: (variableName) ->
+    parts = variableName.split('_')
+    if null == parts
+      parts = [variable]
+    name = ''
+    for part in parts
+      subParts = (part.charAt(0).toUpperCase() + part.slice 1 ).match(/_(.*)|([A-Z][a-z]+)/g)
+      if subParts
+        for part in subParts
+          name +=  part + ' '
+      else
+        name += part + ' '
+    return name.trim()
 
-    getSnakeCasedVariableName: (variable) ->
-        parts = variable.split('_')
-        if null == parts
-            parts = [variable]
+  processVariable: (variable) ->
+    return {
+      name    : variable.name,
+      type    : variable.type,
+      typeHint  : @determineTypeHint(variable.type),
+      description : variable.description || @getHumanReadableVariableName(variable.name),
+      getterScope : variable.getterScope,
+      setterScope : variable.setterScope,
+    }
 
-        name = ''
-        for part in parts
-            # parts = variable.match(/_(.*)|([A-Z][a-z]+)/g)
-            name += '_' + part
+  getMethodName: (type, variableName) ->
+    if @psrMethodNames
+      return type + @getCamelCasedVariableName(variableName)
+    return type + @getSnakeCasedVariableName(variableName)
 
-        return name
+  write: (template, methodType, variable) ->
+    variable = @processVariable(variable)
+    methodName  = @getMethodName(methodType, variable.name)
+    if methodName in @functions
+      console.info(methodName, 'function exists, not adding')
+      return ''
+    if variable.typeHint != ''
+      variable.typeHint += ' '
+    if 'get' == methodType
+      scope = variable.getterScope
+    else
+      scope = variable.setterScope
+    return template .replace /%description%/g , variable.description
+            .replace /%methodName%/g  , methodName
+            .replace /%variable%/g  , variable.name
+            .replace /%type%/g    , variable.type
+            .replace /%scope%/g     , scope
+            .replace /%typeHint%/g  , variable.typeHint
 
-    determineTypeHint: (type) ->
-        if type in @ignoredTypeHints
-            return ""
+  writeGetter : (variable) ->
+    return @write(@getterTemplate, 'get', variable)
 
-        return type
-
-    getHumanReadableVariableName: (variableName) ->
-        parts = variableName.split('_')
-        if null == parts
-            parts = [variable]
-
-        name = ''
-        for part in parts
-            subParts = (part.charAt(0).toUpperCase() + part.slice 1 ).match(/_(.*)|([A-Z][a-z]+)/g)
-            if subParts
-                for part in subParts
-                    name +=  part + ' '
-            else
-                name += part + ' '
-
-        return name.trim()
-
-    processVariable: (variable) ->
-        return {
-            name        : variable.name,
-            type        : variable.type,
-            typeHint    : @determineTypeHint(variable.type),
-            description : variable.description || @getHumanReadableVariableName(variable.name),
-            getterScope : variable.getterScope,
-            setterScope : variable.setterScope,
-        }
-
-    getMethodName: (type, variableName) ->
-        if @psrMethodNames
-            return type + @getCamelCasedVariableName(variableName)
-
-        return type + @getSnakeCasedVariableName(variableName)
-
-
-    write: (template, methodType, variable) ->
-        variable = @processVariable(variable)
-        methodName  = @getMethodName(methodType, variable.name)
-        if methodName in @functions
-            console.info(methodName, 'function exists, not adding')
-            return ''
-
-        if variable.typeHint != ''
-            variable.typeHint += ' '
-
-        if 'get' == methodType
-            scope = variable.getterScope
-        else
-            scope = variable.setterScope
-
-        return template .replace /%description%/g , variable.description
-                        .replace /%methodName%/g  , methodName
-                        .replace /%variable%/g    , variable.name
-                        .replace /%type%/g        , variable.type
-                        .replace /%scope%/g       , scope
-                        .replace /%typeHint%/g    , variable.typeHint
-
-    writeGetter : (variable) ->
-        return @write(@getterTemplate, 'get', variable)
-
-    writeSetter : (variable) ->
-        return @write(@setterTemplate, 'set', variable)
+  writeSetter : (variable) ->
+    return @write(@setterTemplate, 'set', variable)

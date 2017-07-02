@@ -1,23 +1,20 @@
 module.exports =
 class BaseCommand
 
-    appliesToCurrentEditor: ->
-        editor = Workspace.getActiveEditor()
+  appliesToCurrentEditor: ->
+    editor = Workspace.getActiveEditor()
+    unless editor.getGrammar().scopeName is 'text.html.php'
+      console.warn "Cannot run for non php files"
+      return false
+    return true
 
-        unless editor.getGrammar().scopeName is 'text.html.php'
-            console.warn "Cannot run for non php files"
-            return false
+  writeAtEnd: (text) ->
+    content = @getEditorContents()
+    last = content.lastIndexOf('}')
+    console.log content.slice(0, last)
+    editor = atom.workspace.getActiveTextEditor()
+    editor.setText([content.slice(0, last), "\n" + text, content.slice(last)].join(''))
 
-        return true
-
-    writeAtEnd: (text) ->
-        content = @getEditorContents()
-        last = content.lastIndexOf('}')
-        editor = atom.workspace.getActiveTextEditor()
-
-        editor.setText ([content.slice(0, last), "\n"+text, content.slice(last)].join(''))
-
-    getEditorContents: ->
-        editor = atom.workspace.getActiveTextEditor()
-
-        return editor.getText()
+  getEditorContents: ->
+    editor = atom.workspace.getActiveTextEditor()
+    return editor.getText()

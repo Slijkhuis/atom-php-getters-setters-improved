@@ -1,0 +1,34 @@
+menu: [
+  {
+    label: 'Packages'
+    submenu: [
+      label: 'PHP Getters/Setters ++'
+      submenu: [
+        {
+          label: 'Generate All'
+          command: 'php-getters-setters-improved:allGettersSetter'
+        }
+        {
+          label: 'Generate Getters'
+          command: 'php-getters-setters-improved:allGetters'
+        }
+        {
+          label: 'Generate Setters'
+          command: 'php-getters-setters-improved:allSetters'
+        }
+        {
+          label: 'Open UI'
+          command: 'php-getters-setters-improved:showUI'
+        }
+        {
+          label: 'Getter Template Editor'
+          command: 'php-getters-setters-improved:getterTemplateEditor'
+        }
+        {
+          label: 'Setter Template Editor'
+          command: 'php-getters-setters-improved:setterTemplateEditor'
+        }
+      ]
+    ]
+    }
+]

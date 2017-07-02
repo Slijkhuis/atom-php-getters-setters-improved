@@ -1,7 +1,9 @@
-PHP Getters and Setters
+PHP Getters/Setters Improved
 =======================
 
 With PHP Getters and Setters you can automatically generate _Getters_ and _Setters_ for your php classes.
+
+A fork of PHP Getters and Setters with template in files instead of in config memory. Edit templates in their own files.
 
 The code produced is PSR compatible
 
@@ -9,6 +11,7 @@ Features:
 ---------
 
 * Generate Getters, Setters or Both
+* Edit templates in template files for getters and setters
 * Select all variables or just some via UI
 * Control method scope via a DocBlock tag
 * intelligent guessing of variable names, if you use descriptive variable names you do not need to provide a description, the method comment will set accordingly
@@ -20,52 +23,48 @@ Features:
 
 
 ```php
-class test
-{
-    /**
-     * foo container
-     *
-     * @var AbcClass
-     */
-    private $foo;
+<?php
+class test {
+	/**
+	 * foo container
+	 *
+	 * @var AbcClass
+	 */
+	private $foo;
 }
 ```
 
 **Example class after generating Getters and Setters**
 
 ```php
-class test
-{
-    /**
-     * foo container
-     *
-     * @var AbcClass
-     */
-    private $foo;
+<?php
+class test {
 
-    /**
-     * Gets the foo container.
-     *
-     * @return AbcClass
-     */
-    public function getFoo()
-    {
-        return $this->foo;
-    }
+	/**
+	 * foo container
+	 * @var AbcClass
+	 */
+	private $foo;
 
-    /**
-     * Sets the foo container.
-     *
-     * @param AbcClass $foo the foo
-     *
-     * @return self
-     */
-    public function setFoo(AbcClass $foo)
-    {
-        $this->foo = $foo;
+	/**
+	 * Gets the foo container.
+	 * @return AbcClass
+	 */
+	public function getFoo() {
+		return $this->foo;
+	}
 
-        return $this;
-    }
+	/**
+	 * Sets the foo container.
+	 * @param AbcClass $foo the foo
+	 * @return self
+	 */
+	public function setFoo(AbcClass $foo) {
+		$this->foo = $foo;
+
+		return $this;
+	}
+
 }
 ```
 
@@ -100,32 +99,28 @@ A rudimentary template editor is available at ```Packages -> PHP Getters and Set
 
 ### Getter
 ```php
-\ \ \ \ /**\n
-\ \ \ \ * Get the value of %description% \n
-\ \ \ \ * \n
-\ \ \ \ * @return %type%\n
-\ \ \ \ */\n
-\ \ \ %scope% function %methodName%()\n
-\ \ \ {\n
-\ \ \ \ \ \ \ return $this->%variable%;\n
-\ \ \ }\n
-\n
+/**
+ * Get the value of %description%
+ * @return %type%
+ */
+%scope% function %methodName%() {
+	return $this->%variable%;
+}
+
+
 ```
 
 ### Setter
 ```php
-\ \ \ \ /** \n
-\ \ \ \ * Set the value of %description% \n
-\ \ \ \ * \n
-\ \ \ \ * @param %type% %variable%\n
-\ \ \ \ * \n
-\ \ \ \ * @return self\n
-\ \ \ \ */\n
-\ \ \ %scope% function %methodName%(%typeHint%$%variable%)\n
-\ \ \ {\n
-\ \ \ \ \ \ \ $this->%variable% = $%variable%;\n
-\n
-\ \ \ \ \ \ \ return $this;\n
-\ \ \ }\n
-\n
+/**
+ * Set the value of %description%
+ * @param %type% $%variable%
+ * @return self
+ */
+%scope% function %methodName%(%typeHint%$%variable%) {
+	$this->%variable% = $%variable%;
+	return $this;
+}
+
+
 ```
