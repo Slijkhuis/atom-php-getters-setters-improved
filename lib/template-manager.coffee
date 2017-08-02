@@ -4,8 +4,8 @@ module.exports =
 class TemplateManager
 
   constructor: (@functions)->
-    @psrMethodNames   = atom.config.get 'php-getters-setters.camelCasedMethodNames'
-    @ignoredTypeHints = atom.config.get 'php-getters-setters.doNotTypeHint'
+    @psrMethodNames   = atom.config.get 'php-getters-setters-improved.camelCasedMethodNames'
+    @ignoredTypeHints = atom.config.get 'php-getters-setters-improved.doNotTypeHint'
     @getterTemplate   = fs.readFileSync(__dirname + '/../templates/getter').toString()
     @setterTemplate   = fs.readFileSync(__dirname + '/../templates/setter').toString()
 

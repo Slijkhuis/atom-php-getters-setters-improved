@@ -31,7 +31,7 @@ module.exports =
 
 
   parse: ->
-    ignoredTypeHints = atom.config.get 'php-getters-setters.doNotTypeHint'
+    ignoredTypeHints = atom.config.get 'php-getters-setters-improved.doNotTypeHint'
     bc   = new BaseCommand()
     parser = new PhpParser(ignoredTypeHints)
 
@@ -99,7 +99,7 @@ module.exports =
 
     cw = new TemplateManager(functions)
 
-    generateSettersFirst = atom.config.get 'php-getters-setters.generateSettersFirst'
+    generateSettersFirst = atom.config.get 'php-getters-setters-improved.generateSettersFirst'
 
     code = ''
     if generateSettersFirst
